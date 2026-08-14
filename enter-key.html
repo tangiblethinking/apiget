@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Enter Your API Key</title>
+  <style>
+    :root {
+      --bg: #f0f4f8;
+      --card: #ffffff;
+      --text: #1a1a2e;
+      --muted: #5a6474;
+      --primary: #1a73e8;
+      --primary-hover: #1557b0;
+      --success: #34a853;
+      --border: #e2e8f0;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100dvh;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.75rem 1.5rem;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 0.35rem;
+      text-align: center;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .input-wrap {
+      position: relative;
+      margin-bottom: 1.25rem;
+    }
+
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      font-size: 1rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    input:focus {
+      border-color: var(--primary);
+    }
+
+    .toggle-visibility {
+      position: absolute;
+      right: 0.75rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.1rem;
+      color: var(--muted);
+      padding: 0.25rem;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 0.9rem 1.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      min-height: 48px;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      text-align: center;
+      display: none;
+    }
+
+    .message.success {
+      display: block;
+      background: #e6f4ea;
+      color: #137333;
+      border: 1px solid #ceead6;
+    }
+
+    .message.error {
+      display: block;
+      background: #fce8e6;
+      color: #c5221f;
+      border: 1px solid #f5c2c0;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 1.25rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.35rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Enter Your API Key</h1>
+    <p class="subtitle">Paste the key you copied from Google AI Studio</p>
+
+    <form id="keyForm" autocomplete="off">
+      <label for="apiKey">Your API Key</label>
+      <div class="input-wrap">
+        <input
+          type="password"
+          id="apiKey"
+          name="apiKey"
+          placeholder="AIza..."
+          required
+          minlength="20"
+          spellcheck="false"
+          autocomplete="off"
+        >
+        <button type="button" class="toggle-visibility" id="toggleBtn" aria-label="Show API key">👁️</button>
+      </div>
+      <p class="hint">Your key is stored only on this device (localStorage).</p>
+
+      <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+    </form>
+
+    <div class="message" id="message" role="status" aria-live="polite"></div>
+
+    <a class="back-link" href="index.html">← Back to instructions</a>
+  </div>
+
+  <script>
+    (function () {
+      const form = document.getElementById('keyForm');
+      const input = document.getElementById('apiKey');
+      const saveBtn = document.getElementById('saveBtn');
+      const message = document.getElementById('message');
+      const toggleBtn = document.getElementById('toggleBtn');
+
+      // Restore existing key if present
+      const existing = localStorage.getItem('google_ai_studio_api_key');
+      if (existing) {
+        input.value = existing;
+      }
+
+      toggleBtn.addEventListener('click', () => {
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        toggleBtn.textContent = isPassword ? '🙈' : '👁️';
+        toggleBtn.setAttribute('aria-label', isPassword ? 'Hide API key' : 'Show API key');
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const key = input.value.trim();
+
+        if (!key || key.length < 20) {
+          message.className = 'message error';
+          message.textContent = 'Please enter a valid API key.';
+          return;
+        }
+
+        try {
+          localStorage.setItem('google_ai_studio_api_key', key);
+          message.className = 'message success';
+          message.textContent = 'API key saved successfully.';
+          saveBtn.textContent = 'Saved ✓';
+          setTimeout(() => {
+            saveBtn.textContent = 'Save';
+          }, 2000);
+        } catch (err) {
+          message.className = 'message error';
+          message.textContent = 'Could not save the key. Please try again.';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
