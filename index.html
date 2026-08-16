@@ -88,7 +88,7 @@
     .slide-visual {
       aspect-ratio: 16 / 10;
       border-radius: 12px;
-      background: linear-gradient(145deg, #e8f0fe 0%, #d2e3fc 100%);
+      background: #e8f0fe;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -96,6 +96,17 @@
       position: relative;
       overflow: hidden;
       border: 1px solid var(--border);
+    }
+
+    /* Added image styling for the slides */
+    .slide-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Use 'contain' if you don't want the edges of the GIF cropped */
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
     }
 
     .slide-visual .step-badge {
@@ -108,20 +119,8 @@
       font-weight: 600;
       padding: 0.25rem 0.6rem;
       border-radius: 999px;
-    }
-
-    .slide-visual .icon {
-      font-size: 2.75rem;
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-
-    .slide-visual .visual-label {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--primary);
-      text-align: center;
-      padding: 0 1rem;
+      z-index: 2; /* Ensures badge stays above the image */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
     .slide-content h2 {
@@ -325,8 +324,8 @@
           <div class="slide" data-step="1">
             <div class="slide-visual">
               <span class="step-badge">Step 1</span>
-              <div class="icon">🔑</div>
-              <div class="visual-label">Get My API Key button</div>
+              <!-- Replace the src attribute below with your image or GIF URL -->
+              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Get My API Key button" />
             </div>
             <div class="slide-content">
               <h2>Open Google AI Studio</h2>
@@ -338,8 +337,8 @@
           <div class="slide" data-step="2">
             <div class="slide-visual">
               <span class="step-badge">Step 2</span>
-              <div class="icon">➕</div>
-              <div class="visual-label">Create API key &amp; project</div>
+              <!-- Replace the src attribute below with your image or GIF URL -->
+              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Create API key & project" />
             </div>
             <div class="slide-content">
               <h2>Create API key and project</h2>
@@ -355,8 +354,7 @@
           <div class="slide" data-step="3">
             <div class="slide-visual">
               <span class="step-badge">Step 3</span>
-              <div class="icon">📂</div>
-              <div class="visual-label">Create project</div>
+              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Create project" />
             </div>
             <div class="slide-content">
               <h2>Create the project</h2>
@@ -368,8 +366,7 @@
           <div class="slide" data-step="4">
             <div class="slide-visual">
               <span class="step-badge">Step 4</span>
-              <div class="icon">✨</div>
-              <div class="visual-label">Create key</div>
+              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Create key" />
             </div>
             <div class="slide-content">
               <h2>Create the key</h2>
@@ -381,8 +378,7 @@
           <div class="slide" data-step="5">
             <div class="slide-visual">
               <span class="step-badge">Step 5</span>
-              <div class="icon">📋</div>
-              <div class="visual-label">Copy icon</div>
+              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Copy icon" />
             </div>
             <div class="slide-content">
               <h2>Copy your API key</h2>
@@ -394,8 +390,7 @@
           <div class="slide" data-step="6">
             <div class="slide-visual">
               <span class="step-badge">Step 6</span>
-              <div class="icon">↩️</div>
-              <div class="visual-label">Return to this tab</div>
+              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Return to this tab" />
             </div>
             <div class="slide-content">
               <h2>Return here</h2>
@@ -407,8 +402,7 @@
           <div class="slide" data-step="7">
             <div class="slide-visual">
               <span class="step-badge">Step 7</span>
-              <div class="icon">📝</div>
-              <div class="visual-label">Paste your key</div>
+              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Paste your key" />
             </div>
             <div class="slide-content">
               <h2>Paste your key</h2>
@@ -420,8 +414,7 @@
           <div class="slide" data-step="8">
             <div class="slide-visual">
               <span class="step-badge">Step 8</span>
-              <div class="icon">💾</div>
-              <div class="visual-label">Save</div>
+              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Save key" />
             </div>
             <div class="slide-content">
               <h2>Save your key</h2>
@@ -468,7 +461,7 @@
       const stepIndicator = document.getElementById('stepIndicator');
       const thumbsEl = document.getElementById('thumbs');
 
-      // Thumbnail icons matching slides
+      // Thumbnail icons matching slides (Kept for the bottom navigation strip)
       const icons = ['🔑', '➕', '📂', '✨', '📋', '↩️', '📝', '💾'];
 
       // Build thumbnails
