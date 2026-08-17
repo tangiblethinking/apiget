@@ -98,15 +98,21 @@
       border: 1px solid var(--border);
     }
 
-    /* Added image styling for the slides */
-    .slide-image {
+    /* Media (image or video) styling for the slides.
+       Place files in the src/ folder and reference them as src/yourfile.ext */
+    .slide-media {
       width: 100%;
       height: 100%;
-      object-fit: cover; /* Use 'contain' if you don't want the edges of the GIF cropped */
+      object-fit: cover; /* Use 'contain' if you don't want edges cropped */
       position: absolute;
       top: 0;
       left: 0;
       z-index: 1;
+      background: #0f172a;
+    }
+
+    .slide-media--contain {
+      object-fit: contain;
     }
 
     .slide-visual .step-badge {
@@ -119,7 +125,7 @@
       font-weight: 600;
       padding: 0.25rem 0.6rem;
       border-radius: 999px;
-      z-index: 2; /* Ensures badge stays above the image */
+      z-index: 2; /* Ensures badge stays above the media */
       box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
@@ -324,8 +330,10 @@
           <div class="slide" data-step="1">
             <div class="slide-visual">
               <span class="step-badge">Step 1</span>
-              <!-- Replace the src attribute below with your image or GIF URL -->
-              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Get My API Key button" />
+              <!-- Put images/videos in the src/ folder, then set src="src/yourfile.ext"
+                   Use <img class="slide-media" ...> for images/GIFs
+                   Use <video class="slide-media" src="..." autoplay muted loop playsinline></video> for video -->
+              <img class="slide-media" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Get My API Key button" />
             </div>
             <div class="slide-content">
               <h2>Open Google AI Studio</h2>
@@ -337,8 +345,7 @@
           <div class="slide" data-step="2">
             <div class="slide-visual">
               <span class="step-badge">Step 2</span>
-              <!-- Replace the src attribute below with your image or GIF URL -->
-              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Create API key & project" />
+              <img class="slide-media" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Create API key & project" />
             </div>
             <div class="slide-content">
               <h2>Create API key and project</h2>
@@ -354,7 +361,7 @@
           <div class="slide" data-step="3">
             <div class="slide-visual">
               <span class="step-badge">Step 3</span>
-              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Create project" />
+              <img class="slide-media" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Create project" />
             </div>
             <div class="slide-content">
               <h2>Create the project</h2>
@@ -366,7 +373,7 @@
           <div class="slide" data-step="4">
             <div class="slide-visual">
               <span class="step-badge">Step 4</span>
-              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Create key" />
+              <img class="slide-media" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Create key" />
             </div>
             <div class="slide-content">
               <h2>Create the key</h2>
@@ -378,7 +385,7 @@
           <div class="slide" data-step="5">
             <div class="slide-visual">
               <span class="step-badge">Step 5</span>
-              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Copy icon" />
+              <img class="slide-media" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Copy icon" />
             </div>
             <div class="slide-content">
               <h2>Copy your API key</h2>
@@ -390,7 +397,7 @@
           <div class="slide" data-step="6">
             <div class="slide-visual">
               <span class="step-badge">Step 6</span>
-              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Return to this tab" />
+              <img class="slide-media" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Return to this tab" />
             </div>
             <div class="slide-content">
               <h2>Return here</h2>
@@ -402,7 +409,7 @@
           <div class="slide" data-step="7">
             <div class="slide-visual">
               <span class="step-badge">Step 7</span>
-              <img class="slide-image" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Paste your key" />
+              <img class="slide-media" src="YOUR_IMAGE_OR_GIF_URL_HERE.gif" alt="Paste your key" />
             </div>
             <div class="slide-content">
               <h2>Paste your key</h2>
@@ -414,7 +421,17 @@
           <div class="slide" data-step="8">
             <div class="slide-visual">
               <span class="step-badge">Step 8</span>
-              <img class="slide-image" src="src/getapivid.mov" alt="Save key" />
+              <!-- Video from src/ folder. Use <img class="slide-media" ...> for images/GIFs. -->
+              <video
+                class="slide-media"
+                src="src/getapivid.mov"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                aria-label="Save key demonstration"
+              ></video>
             </div>
             <div class="slide-content">
               <h2>Save your key</h2>
@@ -498,6 +515,21 @@
         if (activeThumb) {
           activeThumb.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         }
+
+        // Pause videos on inactive slides; play (restart) video on the active slide
+        slides.forEach((slide, i) => {
+          const video = slide.querySelector('video.slide-media');
+          if (!video) return;
+          if (i === current) {
+            video.currentTime = 0;
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+              playPromise.catch(function () { /* autoplay may be blocked; ignore */ });
+            }
+          } else {
+            video.pause();
+          }
+        });
       }
 
       function goTo(index) {
